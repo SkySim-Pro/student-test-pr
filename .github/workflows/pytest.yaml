@@ -55,8 +55,8 @@ jobs:
 
     - name: Configure Git for SSH
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+        git config --global user.name "LaxminarayanaV7416"
+        git config --global user.email "lvadnala@nd.edu"
 
     - name: Test SSH connection to private repo
       run: |
