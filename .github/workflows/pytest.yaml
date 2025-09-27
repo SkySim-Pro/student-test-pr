@@ -40,7 +40,7 @@ jobs:
         mkdir -p ~/.ssh
         # Create the private key file without any formatting issues
         cat > ~/.ssh/id_ed25519 << 'EOF'
-        ${{ secrets.SSH_PRIVATE_KEY }}
+        ${{ vars.GITHUBACTIONKEY }}
         EOF
         
         # Set proper permissions
