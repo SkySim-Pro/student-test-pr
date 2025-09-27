@@ -17,7 +17,7 @@ jobs:
     # Optional: Run tests against multiple Python versions using a matrix strategy
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.12"]
 
     # Define the steps for the job
     steps:
