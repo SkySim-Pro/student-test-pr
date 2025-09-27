@@ -1,0 +1,43 @@
+# .github/workflows/uv-ci.yml
+name: Python Tests with uv
+
+# Trigger the workflow on pushes or pull requests to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Define the sequence of jobs to be executed
+jobs:
+  test:
+    # Use the latest version of Ubuntu for the runner environment
+    runs-on: ubuntu-latest
+    
+    # Optional: Run tests against multiple Python versions using a matrix strategy
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    # Define the steps for the job
+    steps:
+    - name: Checkout repository
+      # The actions/checkout action fetches your repository's code
+      uses: actions/checkout@v4
+      
+    - name: Install uv and a specific Python version
+      # The official astral-sh/setup-uv action installs uv and can set up Python
+      uses: astral-sh/setup-uv@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      # Use uv sync to install project dependencies from your pyproject.toml
+      run: uv sync
+      
+    - name: Run the main file
+      # Use uv run to execute the main.py file within the project's environment
+      run: uv run main.py
+    # - name: Run tests with pytest
+    #   # Use uv run to execute pytest within the project's environment
+    #   run: uv run pytest
