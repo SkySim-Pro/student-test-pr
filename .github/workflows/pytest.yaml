@@ -35,10 +35,23 @@ jobs:
       # Use uv sync to install project dependencies from your pyproject.toml
       run: uv sync
 
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ vars.GITHUBACTIONKEY }}
+    - name: Create SSH key file
+      run: |
+        mkdir -p ~/.ssh
+        # Create the private key file without any formatting issues
+        cat > ~/.ssh/id_ed25519 << 'EOF'
+        ${{ secrets.SSH_PRIVATE_KEY }}
+        EOF
+        
+        # Set proper permissions
+        chmod 600 ~/.ssh/id_ed25519
+        
+        # Add GitHub to known hosts
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        
+    - name: Test SSH connection
+      run: |
+        ssh -T git@github.com || true
 
     - name: Configure Git for SSH
       run: |
