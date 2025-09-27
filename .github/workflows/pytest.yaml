@@ -35,36 +35,10 @@ jobs:
       # Use uv sync to install project dependencies from your pyproject.toml
       run: uv sync
 
-    - name: Create SSH key file
+    - name: Clone private repository using PAT
       run: |
-        mkdir -p ~/.ssh
-        # Create the private key file without any formatting issues
-        cat > ~/.ssh/id_ed25519 << 'EOF'
-        ${{ vars.GITHUBACTIONKEY }}
-        EOF
-        
-        # Set proper permissions
-        chmod 600 ~/.ssh/id_ed25519
-        
-        # Add GitHub to known hosts
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-        
-    - name: Test SSH connection
-      run: |
-        ssh -T git@github.com || true
-
-    - name: Configure Git for SSH
-      run: |
-        git config --global user.name "LaxminarayanaV7416"
-        git config --global user.email "lvadnala@nd.edu"
-
-    - name: Test SSH connection to private repo
-      run: |
-        ssh -o StrictHostKeyChecking=no -T git@github.com || true
-
-    - name: clone private repo for test cases
-      run: |
-        git clone git@github.com:LaxminarayanaV7416/python-test-private-repo.git private-repo
+        # Clone using PAT (more reliable than SSH)
+        git clone https://x-access-token:${{ secrets.GITHUBPATTOKEN }}@github.com/LaxminarayanaV7416/python-test-private-repo.git private-repo        
         ls -la private-repo
         cp -r private-repo/tests ./tests
         ls -la
