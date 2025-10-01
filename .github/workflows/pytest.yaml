@@ -46,7 +46,7 @@ jobs:
 
     - name: Run the test files
       # Use uv run to execute the main.py file within the project's environment
-      run: uv run pytest
+      run: uv run pytest -s
     # - name: Run tests with pytest
     #   # Use uv run to execute pytest within the project's environment
     #   run: uv run pytest
