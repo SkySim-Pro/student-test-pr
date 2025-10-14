@@ -27,29 +27,20 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_REPO_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          head -n 5 ~/.ssh/id_rsa
-          ssh-keyscan github.com
-
-          # Add GitHub to known hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          
-          # # Configure SSH to use the key
-          # cat >> ~/.ssh/config <<EOF
-          # Host github.com
-          #   HostName github.com
-          #   User git
-          #   IdentityFile ~/.ssh/id_ed25519
-          #   StrictHostKeyChecking no
-          # EOF
-          
-          # chmod 600 ~/.ssh/config  
       
       - name: Configure Git
         run: |
           git config --global user.name "LaxminarayanaV7416"
           git config --global user.email "lvadnala@nd.edu"
+
+      - name: Test SSH key
+        run: |
+          ssh -i ~/.ssh/id_rsa -T git@github.com || true
       
       - name: Clone Private Repo
         env:
