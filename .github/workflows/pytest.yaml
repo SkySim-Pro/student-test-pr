@@ -3,10 +3,12 @@ name: Python Tests with uv
 
 # Trigger the workflow on pushes or pull requests to the main branch
 on:
-  push:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
   pull_request:
     branches: [ main ]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
 
 # Define the sequence of jobs to be executed
 jobs:
