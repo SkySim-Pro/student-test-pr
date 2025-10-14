@@ -3,10 +3,12 @@ name: Python Tests with uv
 
 # Trigger the workflow on pushes or pull requests to the main branch
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
 
 # Define the sequence of jobs to be executed
 jobs:
@@ -24,6 +26,10 @@ jobs:
     - name: Checkout repository
       # The actions/checkout action fetches your repository's code
       uses: actions/checkout@v4
+      with:
+        # Checks out the PR branch (from fork)
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
       
     - name: Install uv and a specific Python version
       # The official astral-sh/setup-uv action installs uv and can set up Python
